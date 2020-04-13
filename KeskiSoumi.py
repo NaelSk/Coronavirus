@@ -2,6 +2,8 @@ import requests
 import pandas as pd
 import matplotlib.pyplot as plt
 
+from datetime import datetime
+
 def split_date1(df):
     #Split one colum according to space
     new=df.Päiväys.str.split("-",expand=True)
@@ -35,18 +37,24 @@ def data_city(df,city):
 
 def grouping(df):
     groups=df.groupby(["Year","Month","Day"]).size().reset_index(name ='number_of_infection')
+    groups=groups.astype(int)
+    
+    groups['Date'] = groups.apply(lambda row: datetime.strptime(f"{int(row.Year)}-{int(row.Month)}-{int(row.Day)}", '%Y-%m-%d'), axis=1)
+    
+    groups=groups.drop(columns=["Year", "Month", "Day"])
     #fig, ax = plt.subplots(figsize=(15,7))
     #groups.unstack().plot(ax=ax) 
     #ax.set_xlabel('Date')
-    #ax.set_ylabel('Number of transactions')
+    ###ax.set_ylabel('Number of transactions')
     return  groups
 
 def main():
     data=data_collecter()
     #print(data.columns)
-    data=data_city(data,"HUS")
+    data=data_city(data,"Keski-Suomi")
     data=grouping(data)
-    print(data.columns)
+    print(data.dtypes)
+    #print(data.columns)
     
     return data
 
