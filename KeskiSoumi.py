@@ -4,6 +4,8 @@ import matplotlib.pyplot as plt
 
 from datetime import datetime
 
+import seaborn as sns
+
 def split_date1(df):
     #Split one colum according to space
     new=df.Päiväys.str.split("-",expand=True)
@@ -42,10 +44,12 @@ def grouping(df):
     groups['Date'] = groups.apply(lambda row: datetime.strptime(f"{int(row.Year)}-{int(row.Month)}-{int(row.Day)}", '%Y-%m-%d'), axis=1)
     
     groups=groups.drop(columns=["Year", "Month", "Day"])
-    #fig, ax = plt.subplots(figsize=(15,7))
-    #groups.unstack().plot(ax=ax) 
-    #ax.set_xlabel('Date')
-    ###ax.set_ylabel('Number of transactions')
+    
+    plt.bar(groups["Date"], groups["number_of_infection"] )
+    plt.xlabel('Data')
+    plt.ylabel('Number of infection') 
+    plt.xticks(rotation=70)
+    plt.show() 
     return  groups
 
 def main():
