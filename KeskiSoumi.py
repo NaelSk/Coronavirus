@@ -1,6 +1,6 @@
 import requests
 import pandas as pd
-
+import matplotlib.pyplot as plt
 
 def split_date1(df):
     #Split one colum according to space
@@ -15,7 +15,7 @@ def split_date1(df):
     df3["Month"]=new[1]
     df3["Year"]=new[2]
     df4=df3.drop(columns="Date")
-    print(df4)
+    #print(df4)
     return df4
 
 
@@ -25,13 +25,30 @@ def data_collecter():
     df_list = pd.read_html(html)
     df = df_list[-1]
     processed_data=split_date1(df)
-    return (df.to_csv('my data.csv'))
+    return processed_data#(processed_data.to_csv('my data.csv'))
 
+
+def data_city(df,city):
+    mask=df["Sair.hoitopiiri"]==city
+    return df[mask]
+
+
+def grouping(df):
+    groups=df.groupby(["Year","Month","Day"]).size().reset_index(name ='number_of_infection')
+    #fig, ax = plt.subplots(figsize=(15,7))
+    #groups.unstack().plot(ax=ax) 
+    #ax.set_xlabel('Date')
+    #ax.set_ylabel('Number of transactions')
+    return  groups
 
 def main():
     data=data_collecter()
-    print(data)
+    #print(data.columns)
+    data=data_city(data,"HUS")
+    data=grouping(data)
+    print(data.columns)
+    
     return data
 
 if __name__ == "__main__":
-    main()
+    print(main())
