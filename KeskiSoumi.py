@@ -44,13 +44,10 @@ def grouping(df):
     groups['Date'] = groups.apply(lambda row: datetime.strptime(f"{int(row.Year)}-{int(row.Month)}-{int(row.Day)}", '%Y-%m-%d'), axis=1)
     
     groups=groups.drop(columns=["Year", "Month", "Day"])
-
-    total_number=groups["number_of_infection"].sum()
-    total="Totale"+str(total_number)
     
     plt.bar(groups["Date"], groups["number_of_infection"] )
     plt.xlabel('Data')
-    plt.ylabel('Number of infection \n'+ total) 
+    plt.ylabel('Number of infection') 
     plt.xticks(rotation=70)
     plt.show() 
     return  groups
@@ -67,3 +64,4 @@ def main():
 
 if __name__ == "__main__":
     print(main())
+
